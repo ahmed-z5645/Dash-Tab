@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Dash-Tab",
+  "author": "Ahmed Zafar",
+  "version": "1.0.1",
+  "description": "Replace the old new-tab screen with an interactive informative dashboard",
+  "icons":{
+    "16": "desk16.ico",
+    "48": "desk48.ico",
+    "128": "desk128.ico"
+  },
+  "chrome_url_overrides":{
+    "newtab": "index.html"
+  }
+}
