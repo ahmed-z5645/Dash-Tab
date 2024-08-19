@@ -1,4 +1,5 @@
 
+
 body {
   margin: 0;
   font-family: "Inter";
@@ -8,8 +9,16 @@ body {
   color:snow;
 }
 
+form {
+  font-size: 1.5vw;
+}
+button {
+  font-size: 0.8vw;
+}
+
 h2 {
   margin-top: 0%;
+  font-size: 1.5vw;
 }
 
 code {

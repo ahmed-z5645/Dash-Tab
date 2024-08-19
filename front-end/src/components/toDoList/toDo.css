@@ -1,0 +1,38 @@
+.login{
+    height:30%;
+    width:80%;
+    background-color: rgba(0, 0, 0, 0.500);
+    border-radius: 0.5vw;
+}
+
+.cred-form{
+    background-color: transparent;
+    border-radius: 0.5vw;
+    border-style: solid;
+    border-color: snow;
+    width: 97.5%;
+    color: snow;
+    font-size: 1vw;
+}
+
+.login-go{
+    background-color: #007AFF;
+    border-radius: 0.5vw;
+    border-color: transparent;
+    border-style: solid;
+    width:80%;
+    color: snow;
+    font-size: 1vw;
+    font-weight: 600;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.login-create{
+    background-color: transparent;
+    color: #007AFF;
+    font-size: 0.75vw;
+    font-weight: 475;
+    padding-bottom: 4%;
+    text-decoration: underline;
+}

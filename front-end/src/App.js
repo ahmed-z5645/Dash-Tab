@@ -2,6 +2,7 @@ import react, { useState, useEffect } from 'react';
 import './App.css';
 import { backgrounds } from './iterates.js';
 import Clock from './components/clock.js'
+import ToDo from './components/toDoList/toDo.js';
 
 function App() {
 
@@ -19,15 +20,16 @@ function App() {
   return (
     <div className="App">
       <div className ="content" style={{backgroundImage:`url(${back})`}}>
-        <div className="gcal"></div>
         <div className="main">
           <div className="top">
             <Clock />
             <div className="quote">{quote}</div>
           </div>
-          <div className="icons"></div>
+          <div className="bottom"></div>
         </div>
-        <div className="to-do"></div>
+        <div className="to-do"> 
+          <ToDo /> 
+        </div>
       </div>
     </div>
   );

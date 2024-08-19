@@ -16,33 +16,33 @@
   justify-content: space-around;
 }
 
-.gcal{
-  width: 25%;
-  height: 95%;
-}
-
 .main{
-  width: 45%;
+  width: 50%;
   height: 95%;
 }
 
 .to-do{
-  width: 25%;
+  width: 40%;
   height: 95%;
-  
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
 .top{
   padding-top: 1%;
-  width: 90%;
+  width: 100%;
+  height:50%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: auto;
 }
 
 .quote{
-  background-color: rgba(0, 0, 0, 0.466);
+  background-color: rgba(0, 0, 0, 0.500);
   border-radius: 0.5vw;
   width: fit-content;
   margin-top: 0%;
@@ -55,7 +55,8 @@
 
 .clocktimer{
   margin-top: 0%;
-  font-size: 7.5vw;
+  font-size: 8vw;
   font-weight: 700;
   margin-bottom: 0%;
 }
+
