@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import '../App.css'
 
@@ -12,8 +12,15 @@ const Clock = () => {
         var hours = curr_time.getHours()
         var mins = curr_time.getMinutes()
     };
-    
-    setInterval(updateTime)
+
+    useEffect(()=>{
+        const interval = setInterval(()=>{
+            updateTime()
+        }, 60000);
+
+        return () => {clearInterval(interval)}
+        
+    },[])
 
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const month = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.", "Jul.", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]

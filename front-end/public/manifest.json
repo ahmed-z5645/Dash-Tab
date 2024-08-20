@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Dash-Tab",
   "author": "Ahmed Zafar",
-  "version": "0.1.2",
+  "version": "0.2.2",
   "description": "Replace the old new-tab screen with an interactive informative dashboard",
   "icons":{
     "16": "desk16.ico",
@@ -15,16 +15,6 @@
   "permissions": [
     "identity"
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "oauth2": {
-    "client_id": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-    "scopes": [
-      "profile",
-      "email"
-    ]
-  },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';"
   }
