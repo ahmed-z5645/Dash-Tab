@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
+//import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
+
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged } from "firebase/auth/web-extension";
+
 import { auth } from "../../firebase.js";
 import './toDo.css'
 
@@ -37,7 +40,7 @@ const ToDo = () => {
 
     const newSignIn = (e) => {
         e.preventDefault();
-        setPersistence(auth, browserLocalPersistence)
+        setPersistence(auth, indexedDBLocalPersistence)
         .then(()=>{
             console.log("this is working??")
             console.log(auth)
