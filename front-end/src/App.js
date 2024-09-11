@@ -25,7 +25,9 @@ function App() {
             <Clock />
             <div className="quote">{quote}</div>
           </div>
-          <div className="bottom"></div>
+          <div className="bottom">
+            
+          </div>
         </div>
         <div className="to-do"> 
           <ToDo /> 

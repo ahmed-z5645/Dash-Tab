@@ -36,3 +36,11 @@
     padding-bottom: 4%;
     text-decoration: underline;
 }
+
+.login-create:hover {
+    cursor: pointer;
+}
+
+.login-go:hover {
+    cursor: pointer;
+}
