@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './toDo.css'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, setDoc, doc } from "firebase/firestore";
 
 import { auth, db } from "../../firebase.js"
 
@@ -56,17 +56,10 @@ const LoginInterface = ({needCreate, setNeedCreate, isLoggedIn, setIsLoggedIn}) 
     }
     
     const addUserToDB = async(user) => {
-        try{
-            const id = user.uid
-            const docRef = await addDoc(collection(db, "users"), {
-                id : {
-                    tasks: {},
-                    timeSaved: 0
-                }
-            });
-        } catch (e) {
-            console.error("Error initializing document", e)
-        }
+        await setDoc(doc(db, "users", user.uid), {
+            tasks: {},
+            timeSaved: 0
+        })
     }
         
     const logout = () => {
