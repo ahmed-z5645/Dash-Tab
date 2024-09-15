@@ -12,7 +12,14 @@ const ToDoList = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(true)
     const [needCreate, setNeedCreate] = useState(false);
     const [userInfo, setUserInfo] = useState(null)
-     
+    const [curr_time, setCurrT] = useState(null);
+
+    var time = new Date()
+    useEffect(()=>{
+        const time = new Date();
+        setCurrT(Math.floor(time.getTime()/1000))
+    }, [])
+
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -51,31 +58,35 @@ const ToDoList = () => {
     return(
         <div>
             {(isLoggedIn) ? 
-            <div> 
-                <div>signed in</div> 
+            <div>  
                 <div className="to-do-ui">{(userInfo) ? 
                     <div>
-                        <div className="new-to-do"></div>
+                        <div className="new-to-do">
+                            <form className="task">
+                                <input></input>
+                                <button type="submit">new item</button>
+                            </form>
+                        </div>
                         <div className="all-to-do">
                             {Object.values(userInfo).map((item) => {
-                                console.log(item)
-                                console.log(userInfo)
                                 return(
                                     <div className="task">
                                         <div className="task-text">
-                                            <h1>{item.Title}</h1>
-                                            <h3>{item.tOfCreate.seconds}</h3>
-                                            <p>hello</p>
+                                            <p><span className="task-title">{item.Title}</span></p>
+                                            {((curr_time - item.tOfCreate.seconds) >= 604800) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 604800)} weeks ago </p> : 
+                                            ((curr_time - item.tOfCreate.seconds) >= 86400) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 86400)} days ago </p> : 
+                                            ((curr_time - item.tOfCreate.seconds) >= 3600) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 3600)} hours ago </p> : 
+                                            ((curr_time - item.tOfCreate.seconds) >= 60) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 60)} mins ago</p> : <p className="task-time">- just now</p>}
                                         </div>
                                         <div className="task-done">
-                                            <button>Completed</button>
+                                            <button className="task-button"></button>
                                         </div>
                                     </div>
                                 )
                             })}
                         </div>
                     </div> 
-                    : <p>not accessing object properly</p>}</div>
+                    : <p>Loading...</p>}</div>
                 <div className="login-create" onClick={logout}> Sign-Out </div>
             </div>
             :

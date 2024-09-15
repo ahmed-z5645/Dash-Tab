@@ -44,3 +44,60 @@
 .login-go:hover {
     cursor: pointer;
 }
+
+.task{
+    background-color: rgba(0, 0, 0, 0.500);
+    border-radius: 0.5vw;
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 2%;
+    margin-left: 0%;
+    justify-content: space-between;
+}
+
+.task-text{
+    margin-left: 3%;
+    display: flex
+}
+
+.task-text p{
+    font-size: 1.2vw;
+}
+
+.task-title{
+    font-weight: 700;
+    width: max-content;
+    white-space: nowrap;
+}
+
+.task-time{
+    margin-left: 3%;
+    white-space: nowrap;
+    color: rgb(255, 250, 250, 0.500);
+}
+
+.task-done{
+    display:flex;
+    align-items: center;
+    margin-right: 3%;
+    width: 4.5%;
+}
+
+.task-button{
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: 100%;
+    height: 1.8vw;
+    background-color: transparent;
+    border-color: snow;
+    border-style:solid;
+    border-radius: 0.5vw;
+    border-width: 0.2vw;
+}
+
+.task-button:hover{
+    cursor:pointer;
+}
