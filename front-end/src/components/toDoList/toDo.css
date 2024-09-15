@@ -101,3 +101,21 @@
 .task-button:hover{
     cursor:pointer;
 }
+
+.new-input{
+    background: transparent; 
+    border-color: transparent;
+    color: snow;
+    font-size: 1.2vw;
+    margin-top: 0.95em;
+    margin-bottom: 0.95em;
+    margin-left: 2.2%;
+    margin-right: 0;
+    font-weight: 700; 
+    border-bottom-color: snow;
+}
+
+.new-input::placeholder{
+    color:rgb(255, 250, 250, 0.500);
+    font-weight: normal;
+}

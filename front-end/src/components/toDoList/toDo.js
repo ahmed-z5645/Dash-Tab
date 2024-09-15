@@ -63,8 +63,11 @@ const ToDoList = () => {
                     <div>
                         <div className="new-to-do">
                             <form className="task">
-                                <input></input>
-                                <button type="submit">new item</button>
+                                <input className="new-input" placeholder="New Task"></input>
+
+                                <div className="task-done" style={{ marginRight: "1.35vw" }}><button type="submit" style={{color: "inherit", padding: 0, font: "inherit",
+                                cursor: "pointer", outline: "inherit", width: "100%", height: "1.8vw",
+                                backgroundColor: "transparent", borderColor: "transparent", display: "flex", alignItems: "center"}}><div style={{fontSize: "3vw", position: "relative", bottom: "0.2vh"}}>+</div></button></div>
                             </form>
                         </div>
                         <div className="all-to-do">
@@ -99,3 +102,10 @@ const ToDoList = () => {
 }
 
 export default ToDoList
+
+/*
+style={{color: "inherit", padding: 0, font: "inherit",
+                                cursor: "pointer", outline: "inherit", width: "1.8vw", height: "1.8vw",
+                                backgroundColor: "transparent", borderColor: "snow", borderStyle:"solid",
+                                borderRadius: "0.5vw", borderWidth: "0.2vw"}}
+*/
