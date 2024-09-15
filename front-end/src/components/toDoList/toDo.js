@@ -56,9 +56,9 @@ const ToDoList = () => {
     }
     
     return(
-        <div>
+        <div style={{height: "100%"}}>
             {(isLoggedIn) ? 
-            <div>  
+            <div style={{height:"95%"}}>  
                 <div className="to-do-ui">{(userInfo) ? 
                     <div>
                         <div className="new-to-do">
@@ -89,8 +89,11 @@ const ToDoList = () => {
                             })}
                         </div>
                     </div> 
-                    : <p>Loading...</p>}</div>
-                <div className="login-create" onClick={logout}> Sign-Out </div>
+                    : <p>Loading...</p>}
+                </div>
+            <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "0.5vw",
+                    display:"flex", justifyContent:"center", alignItems:"center", width: "15%", paddingBottom: 0,
+                    margin: "auto", height: "5%"}}onClick={logout}><p>Sign-Out</p></div>
             </div>
             :
             <div>
@@ -102,10 +105,3 @@ const ToDoList = () => {
 }
 
 export default ToDoList
-
-/*
-style={{color: "inherit", padding: 0, font: "inherit",
-                                cursor: "pointer", outline: "inherit", width: "1.8vw", height: "1.8vw",
-                                backgroundColor: "transparent", borderColor: "snow", borderStyle:"solid",
-                                borderRadius: "0.5vw", borderWidth: "0.2vw"}}
-*/
