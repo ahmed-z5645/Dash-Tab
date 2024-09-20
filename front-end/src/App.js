@@ -3,6 +3,7 @@ import './App.css';
 import { backgrounds } from './iterates.js';
 import Clock from './components/clock.js'
 import ToDo from './components/toDoList/toDo.js';
+import Search from './components/searchBar/search.js'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <div className="top">
             <Clock />
             <div className="quote">{quote}</div>
+            <Search />
           </div>
           <div className="bottom">
             

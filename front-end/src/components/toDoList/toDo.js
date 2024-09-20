@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, addDoc } from 'firebase/firestore'
 import { auth, db } from "../../firebase.js";
 import './toDo.css'
 
@@ -24,6 +24,7 @@ const ToDoList = () => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setIsLoggedIn(user);
+                console.log(user)
                 getAllDocs(user)
             } else {
                 setIsLoggedIn(null)
@@ -54,6 +55,19 @@ const ToDoList = () => {
             console.error('Error signing out:', error);
         });
     }
+
+    const newTask = (e) => {
+        e.preventDefault()
+        const time = new Date();
+        const real = time.getTime()
+        const data = {}
+        data[real] = {
+            Title: e.target.value,
+            tOfCreate: real,
+            completed: false
+        }
+        db.collection('users').doc(auth.uid).collection('tasks').add({data})
+    }
     
     return(
         <div style={{height: "100%"}}>
@@ -62,7 +76,7 @@ const ToDoList = () => {
                 <div className="to-do-ui">{(userInfo) ? 
                     <div>
                         <div className="new-to-do">
-                            <form className="task">
+                            <form className="task" onSubmit={newTask}>
                                 <input className="new-input" placeholder="New Task"></input>
 
                                 <div className="task-done" style={{ marginRight: "1.35vw" }}><button type="submit" style={{color: "inherit", padding: 0, font: "inherit",
