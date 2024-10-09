@@ -11,13 +11,17 @@
     background: transparent; 
     width: 90%;
     border-color: transparent;
-    color: snow;
+    color: #fffafa95;
     font-size: 1.2vw;
     margin-top: 0.65em;
     margin-bottom: 0.65em;
-    margin-left: 2.2%;
+    margin-left: 2.8%;
     margin-right: 0;
     font-weight: 700; 
+}
+
+.search-bar-input:focus{
+    outline-style: none;
 }
 
 .search-bar-go{
@@ -28,7 +32,8 @@
     outline: inherit;
     background-color: transparent;
     border-style: none;
-    width: 5%
+    width: 4%;
+    margin-top: 0.5%;
 }
 
 .search-bar-input::placeholder{
