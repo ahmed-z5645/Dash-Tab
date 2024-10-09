@@ -28,7 +28,7 @@ const Clock = () => {
     
     return(
         <>
-            <div className="clocktimer">{(curr_time.getHours() >= 13) ? (curr_time.getHours() - 12) : curr_time.getHours()}:{(curr_time.getMinutes() <= 9) ? (`0${curr_time.getMinutes()}`) : curr_time.getMinutes()}</div>
+            <div className="clocktimer">{(curr_time.getHours() >= 13) ? (curr_time.getHours() - 12) : (curr_time.getHours() == 0 ? 12 : curr_time.getHours())}:{(curr_time.getMinutes() <= 9) ? (`0${curr_time.getMinutes()}`) : curr_time.getMinutes()}</div>
             <h2>{weekday[curr_time.getDay()]}, {month[curr_time.getMonth()]} {curr_time.getDate()}, {curr_time.getFullYear()}</h2>
         </>
     )

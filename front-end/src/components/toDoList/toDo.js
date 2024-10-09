@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { doc, getDoc, addDoc } from 'firebase/firestore'
+import { doc, getDoc, addDoc, updateDoc, setDoc, collection } from 'firebase/firestore'
 import { auth, db } from "../../firebase.js";
 import './toDo.css'
 
@@ -13,6 +13,7 @@ const ToDoList = () => {
     const [needCreate, setNeedCreate] = useState(false);
     const [userInfo, setUserInfo] = useState(null)
     const [curr_time, setCurrT] = useState(null);
+    const [newTaskTitle, setTaskTitle] = useState(null);
 
     var time = new Date()
     useEffect(()=>{
@@ -24,7 +25,6 @@ const ToDoList = () => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setIsLoggedIn(user);
-                console.log(user)
                 getAllDocs(user)
             } else {
                 setIsLoggedIn(null)
@@ -38,7 +38,6 @@ const ToDoList = () => {
         const docSnap = await getDoc(docRef)
         
         if (!userInfo){
-            console.log('here')
             if (docSnap.exists()) {
                 console.log("Document data:", docSnap.data());
                 setUserInfo(docSnap.data().tasks)
@@ -56,17 +55,25 @@ const ToDoList = () => {
         });
     }
 
-    const newTask = (e) => {
+    const newTaskHandler = async(e) => {
         e.preventDefault()
-        const time = new Date();
-        const real = time.getTime()
-        const data = {}
-        data[real] = {
-            Title: e.target.value,
-            tOfCreate: real,
-            completed: false
+        try {
+            const time = new Date();
+            const real = time.getTime()
+            const data = { tasks : {
+                            [real.toString()] : {
+                                Title: newTaskTitle,
+                                tOfCreate: real,
+                                completed: false
+                                }
+                        }
+                    }
+            const userSubCollec = doc(db, "users", isLoggedIn.uid)
+            await setDoc(userSubCollec, data, {merge:true})
+            getAllDocs(isLoggedIn)
+        } catch (error) {
+            console.log(error)
         }
-        db.collection('users').doc(auth.uid).collection('tasks').add({data})
     }
     
     return(
@@ -76,8 +83,11 @@ const ToDoList = () => {
                 <div className="to-do-ui">{(userInfo) ? 
                     <div>
                         <div className="new-to-do">
-                            <form className="task" onSubmit={newTask}>
-                                <input className="new-input" placeholder="New Task"></input>
+                            <form className="task" onSubmit={newTaskHandler}>
+                                <input className="new-input" 
+                                placeholder="New Task" 
+                                required
+                                onChange={(e) => setTaskTitle(e.target.value)}></input>
                                 <div className="task-done" style={{ marginRight: "1.35vw" }}><button type="submit" style={{color: "inherit", padding: 0, font: "inherit",
                                 cursor: "pointer", outline: "inherit", width: "100%", height: "1.8vw",
                                 backgroundColor: "transparent", borderColor: "transparent", display: "flex", alignItems: "center"}}><div style={{fontSize: "3vw", position: "relative", bottom: "0.2vh"}}>+</div></button></div>
@@ -95,7 +105,7 @@ const ToDoList = () => {
                                             ((curr_time - item.tOfCreate.seconds) >= 60) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 60)} mins ago</p> : <p className="task-time">- just now</p>}
                                         </div>
                                         <div className="task-done">
-                                            <button className="task-button"></button>
+                                            <button className="task-button" onClick={() => {console.log(newTaskTitle)}}></button>
                                         </div>
                                     </div>
                                 )
