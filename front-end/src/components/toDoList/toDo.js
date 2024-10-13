@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { doc, getDoc, addDoc, updateDoc, setDoc, collection } from 'firebase/firestore'
+import { doc, getDoc, addDoc, updateDoc, setDoc, collection, orderBy, getDocs } from 'firebase/firestore'
 import { auth, db } from "../../firebase.js";
 import './toDo.css'
 
@@ -35,12 +35,17 @@ const ToDoList = () => {
 
     const getAllDocs = async(user) =>{
         const docRef = doc(db, "users", user.uid)
-        const docSnap = await getDoc(docRef)
+        const docSnap = await getDoc(docRef, orderBy("tOfCreate"))
         
         if (!userInfo){
             if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                setUserInfo(docSnap.data().tasks)
+                const data = docSnap.data().tasks
+                const sortedKeys = Object.keys(data).map(Number).sort((a, b) => b - a)
+                const sortedData = sortedKeys.reduce((acc, key) => {
+                    acc[key] = data[key];
+                    return acc;
+                }, {});
+                setUserInfo(sortedData)
             } else {
                 console.log("No such document!")
             }
@@ -70,10 +75,30 @@ const ToDoList = () => {
                     }
             const userSubCollec = doc(db, "users", isLoggedIn.uid)
             await setDoc(userSubCollec, data, {merge:true})
-            getAllDocs(isLoggedIn)
+            
+            const docRef = doc(db, "users", isLoggedIn.uid)
+            const docSnap = await getDoc(docRef)
+
+            if (docSnap.exists()) {
+                const data = docSnap.data().tasks
+                const sortedKeys = Object.keys(data).map(Number).sort((a, b) => b - a)
+                const sortedData = sortedKeys.reduce((acc, key) => {
+                    acc[key] = data[key];
+                    return acc;
+                }, {});
+                setUserInfo(sortedData)
+            } else {
+                console.log("No such document!")
+            }
+
+            setTaskTitle(null)
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const deleteTask = (title) => {
+        console.log(isLoggedIn)
     }
     
     return(
@@ -99,13 +124,13 @@ const ToDoList = () => {
                                     <div className="task">
                                         <div className="task-text">
                                             <p><span className="task-title">{item.Title}</span></p>
-                                            {((curr_time - item.tOfCreate.seconds) >= 604800) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 604800)} weeks ago </p> : 
-                                            ((curr_time - item.tOfCreate.seconds) >= 86400) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 86400)} days ago </p> : 
-                                            ((curr_time - item.tOfCreate.seconds) >= 3600) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 3600)} hours ago </p> : 
-                                            ((curr_time - item.tOfCreate.seconds) >= 60) ? <p className="task-time">- {Math.floor((curr_time - item.tOfCreate.seconds) / 60)} mins ago</p> : <p className="task-time">- just now</p>}
-                                        </div>
+                                            {((curr_time - (item.tOfCreate / 1000)) >= 604800) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 604800)} weeks ago </p> : 
+                                            ((curr_time - (item.tOfCreate / 1000)) >= 86400) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 86400)} days ago </p> : 
+                                            ((curr_time - (item.tOfCreate / 1000)) >= 3600) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 3600)} hours ago </p> : 
+                                            ((curr_time - (item.tOfCreate / 1000)) >= 60) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 60)} mins ago</p> : <p className="task-time">- just now</p>}
+                                        </div> {console.log(curr_time + ", " + (item.tOfCreate / 1000))}
                                         <div className="task-done">
-                                            <button className="task-button" onClick={() => {console.log(newTaskTitle)}}></button>
+                                            <button className="task-button" onClick={deleteTask((item.tOfCreate / 1000))}></button>
                                         </div>
                                     </div>
                                 )
