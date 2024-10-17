@@ -1,19 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { doc, getDoc, addDoc, updateDoc, setDoc, collection, orderBy, getDocs, deleteField, deleteDoc } from 'firebase/firestore'
+import { onAuthStateChanged, signOut } from "firebase/auth/web-extension";
+import { doc, setDoc, collection, orderBy, getDocs, deleteDoc } from 'firebase/firestore'
 import { auth, db } from "../../firebase.js";
-import './toDo.css'
 
+import './toDo.css'
 import LoginInterface from './auth.js'
 
 const ToDoList = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(true)
     const [needCreate, setNeedCreate] = useState(false);
-    const [userInfo, setUserInfo] = useState({})
+    const [userDocs, setUserDocs] = useState({})
     const [curr_time, setCurrT] = useState(null);
-    const [newTaskTitle, setTaskTitle] = useState(null);
+    const [newTaskTitle, setTaskTitle] = useState("");
 
     var time = new Date()
     useEffect(()=>{
@@ -34,16 +34,15 @@ const ToDoList = () => {
     })
 
     const getAllDocs = async(user) =>{
-        const docRef = collection(db, "users", user.uid, "tasks")
-        const docSnap = await getDocs(docRef, orderBy("tOfCreate"))
-        if (Object.keys(userInfo).length == 0){            
+        const taskCollecRef = collection(db, "users", user.uid, "tasks")
+        const collecSnap = await getDocs(taskCollecRef, orderBy("tOfCreate"))
+        if (Object.keys(userDocs).length == 0){            
             //do I need smt here for the case where the user has no tasks?
             var allObjects = {}
-            docSnap.docs.map((doc)=> {
-                console.log(doc.data())
+            collecSnap.docs.map((doc)=> {
                 allObjects[doc.data().tOfCreate] = doc.data()
             }, {});
-            setUserInfo(Object.fromEntries(Object.entries(allObjects).reverse()))
+            setUserDocs(Object.fromEntries(Object.entries(allObjects).reverse()))
         }
         }
 
@@ -58,24 +57,23 @@ const ToDoList = () => {
     const newTaskHandler = async(e) => {
         e.preventDefault()
         try {
-            const time = new Date();
-            const real = time.getTime()
+            var time = new Date()
+            time = time.getTime()
             const data = {
                                 Title: newTaskTitle,
-                                tOfCreate: real,
+                                tOfCreate: time,
                                 completed: false
                         }
-            const userSubCollec = doc(db, "users", isLoggedIn.uid, "tasks", real.toString())
-            await setDoc(userSubCollec, data)
+            const newTask = doc(db, "users", isLoggedIn.uid, "tasks", time.toString())
+            await setDoc(newTask, data)
             
-            const docRef = collection(db, "users", isLoggedIn.uid, "tasks")
-            const docSnap = await getDocs(docRef, orderBy("tOfCreate"))
+            const taskCollecRef = collection(db, "users", isLoggedIn.uid, "tasks")
+            const collecSnap = await getDocs(taskCollecRef, orderBy("tOfCreate"))
             var allObjects = {}
-            docSnap.docs.map((doc)=> {
-                console.log(doc.data())
+            collecSnap.docs.map((doc)=> {
                 allObjects[doc.data().tOfCreate] = doc.data()
             }, {});
-            setUserInfo(Object.fromEntries(Object.entries(allObjects).reverse()))
+            setUserDocs(Object.fromEntries(Object.entries(allObjects).reverse()))
 
             setTaskTitle("")
         } catch (error) {
@@ -83,30 +81,24 @@ const ToDoList = () => {
         }
     }
 
-    const deleteTaskHelp = async(template, docRef) => {
-        
-    }
-
     const deleteTask = async (title) => {
-        let temp = {...userInfo}
+        let temp = {...userDocs}
         delete temp[String(title)];
-        const userSubCollec = doc(db, "users", isLoggedIn.uid, "tasks", String(title))
-        console.log(userSubCollec)
+        const delTask = doc(db, "users", isLoggedIn.uid, "tasks", String(title))
         try {
-            await deleteDoc(userSubCollec)
+            await deleteDoc(delTask)
             console.log("Doc deleted successfully")
-            setUserInfo(temp)    
+            setUserDocs(temp)    
         } catch (error) {
             console.log(error.message)
         }
-        console.log(userInfo)
     }
     
     return(
         <div style={{height: "100%"}}>
             {(isLoggedIn) ? 
             <div style={{height:"95%"}}>  
-                <div className="to-do-ui">{(userInfo) ? 
+                <div className="to-do-ui">{(userDocs) ? 
                     <div>
                         <div className="new-to-do">
                             <form className="task" onSubmit={newTaskHandler}>
@@ -122,7 +114,7 @@ const ToDoList = () => {
                         </div>
                         <div className="all-to-do">
                             {/*add something here about being done all tasks if they are*/}
-                            {Object.values(userInfo).map((item) => {
+                            {Object.values(userDocs).map((item) => {
                                 return(
                                     <div className="task">
                                         <div className="task-text">
