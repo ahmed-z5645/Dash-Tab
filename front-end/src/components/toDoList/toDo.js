@@ -34,24 +34,18 @@ const ToDoList = () => {
     })
 
     const getAllDocs = async(user) =>{
-        const docRef = doc(db, "users", user.uid)
-        const docSnap = await getDoc(docRef, orderBy("tOfCreate"))
-        console.log("hi")
-        if (Object.keys(userInfo).length == 0){
-            if (docSnap.exists()) {
-                //do we need smt here for the case where the user has no tasks?
-                const data = docSnap.data().tasks
-                const sortedKeys = Object.keys(data).map(Number).sort((a, b) => b - a)
-                const sortedData = sortedKeys.reduce((acc, key) => {
-                    acc[key] = data[key];
-                    return acc;
-                }, {});
-                setUserInfo(sortedData)
-            } else {
-                console.log("No such document!")
-            }
+        const docRef = collection(db, "users", user.uid, "tasks")
+        const docSnap = await getDocs(docRef, orderBy("tOfCreate"))
+        if (Object.keys(userInfo).length == 0){            
+            //do I need smt here for the case where the user has no tasks?
+            var allObjects = {}
+            docSnap.docs.map((doc)=> {
+                console.log(doc.data())
+                allObjects[doc.data().tOfCreate] = doc.data()
+            }, {});
+            setUserInfo(Object.fromEntries(Object.entries(allObjects).reverse()))
         }
-    }
+        }
 
     const logout = () => {
         signOut(auth).then(() => {
@@ -66,58 +60,45 @@ const ToDoList = () => {
         try {
             const time = new Date();
             const real = time.getTime()
-            const data = { tasks : {
-                            [real.toString()] : {
+            const data = {
                                 Title: newTaskTitle,
                                 tOfCreate: real,
                                 completed: false
-                                }
                         }
-                    }
-            const userSubCollec = collection(db, "users", isLoggedIn.uid)
-            await addDoc(userSubCollec, data, {merge:true})
+            const userSubCollec = doc(db, "users", isLoggedIn.uid, "tasks", real.toString())
+            await setDoc(userSubCollec, data)
             
-            const docRef = doc(db, "users", isLoggedIn.uid)
-            const docSnap = await getDoc(docRef)
+            const docRef = collection(db, "users", isLoggedIn.uid, "tasks")
+            const docSnap = await getDocs(docRef, orderBy("tOfCreate"))
+            var allObjects = {}
+            docSnap.docs.map((doc)=> {
+                console.log(doc.data())
+                allObjects[doc.data().tOfCreate] = doc.data()
+            }, {});
+            setUserInfo(Object.fromEntries(Object.entries(allObjects).reverse()))
 
-            if (docSnap.exists()) {
-                const data = docSnap.data().tasks
-                const sortedKeys = Object.keys(data).map(Number).sort((a, b) => b - a)
-                const sortedData = sortedKeys.reduce((acc, key) => {
-                    acc[key] = data[key];
-                    return acc;
-                }, {});
-                setUserInfo(sortedData)
-            } else {
-                console.log("No such document!")
-            }
-
-            setTaskTitle(null)
+            setTaskTitle("")
         } catch (error) {
             console.log(error)
         }
     }
 
     const deleteTaskHelp = async(template, docRef) => {
-        try {
-            await deleteDoc(docRef).then(() => {
-                console.log("Doc deleted successfully")
-                setUserInfo(template)
-            })
-        } catch (error) {
-            console.log(error.message)
-        }
+        
     }
 
     const deleteTask = async (title) => {
         let temp = {...userInfo}
         delete temp[String(title)];
-        const data = {
-            tasks: temp
-        }
         const userSubCollec = doc(db, "users", isLoggedIn.uid, "tasks", String(title))
         console.log(userSubCollec)
-        await deleteTaskHelp(temp, userSubCollec)
+        try {
+            await deleteDoc(userSubCollec)
+            console.log("Doc deleted successfully")
+            setUserInfo(temp)    
+        } catch (error) {
+            console.log(error.message)
+        }
         console.log(userInfo)
     }
     
@@ -132,6 +113,7 @@ const ToDoList = () => {
                                 <input className="new-input" 
                                 placeholder="New Task" 
                                 required
+                                value={newTaskTitle}
                                 onChange={(e) => setTaskTitle(e.target.value)}></input>
                                 <div className="task-done" style={{ marginRight: "1.35vw" }}><button type="submit" style={{color: "inherit", padding: 0, font: "inherit",
                                 cursor: "pointer", outline: "inherit", width: "100%", height: "1.8vw",
@@ -144,7 +126,7 @@ const ToDoList = () => {
                                 return(
                                     <div className="task">
                                         <div className="task-text">
-                                            <p><span className="task-title">{item.Title}</span></p>
+                                            <p><span className="task-title">{item["Title"]}</span></p>
                                             {((curr_time - (item.tOfCreate / 1000)) >= 604800) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 604800)} weeks ago </p> : 
                                             ((curr_time - (item.tOfCreate / 1000)) >= 86400) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 86400)} days ago </p> : 
                                             ((curr_time - (item.tOfCreate / 1000)) >= 3600) ? <p className="task-time">- {Math.floor((curr_time - (item.tOfCreate / 1000)) / 3600)} hours ago </p> : 
