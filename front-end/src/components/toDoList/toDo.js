@@ -134,9 +134,18 @@ const ToDoList = () => {
                     </div> 
                     : <p>Loading...</p>}
                 </div>
-            <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "0.5vw",
-                    display:"flex", justifyContent:"center", alignItems:"center", width: "15%", paddingBottom: 0,
-                    margin: "auto", height: "5%"}}onClick={logout}><p>Sign-Out</p></div>
+            <div className="buttons">
+                <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "1vw",
+                    display:"flex", justifyContent:"center", alignItems:"center", width: "75%", paddingBottom: 0,
+                    margin: "auto", borderRadius: "1vw", marginRight: "5%", fontSize:"1.2vw"}} onClick={logout}>
+                    <img />
+                    <p><span className="task-title">Focus</span></p>
+                    <img />
+                </div>
+                <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "1vw",
+                    display:"flex", justifyContent:"center", alignItems:"center", width: "20%", paddingBottom: 0,
+                    margin: "auto", borderRadius: "1vw"}} onClick={logout}><p><span className="task-title">Sign-Out</span></p></div>
+            </div>
             </div>
             :
             <div>

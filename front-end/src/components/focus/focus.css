@@ -1,0 +1,23 @@
+.cont{
+    width: 100%;
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+}
+
+.cont a{
+    color: snow;
+    font-size: 0.75vw;
+}
+
+.message{
+    width: 80%;
+    text-align: left;
+    margin-right: 0%;
+    height: 3.4vw;
+    margin-bottom: 2%;
+}
+
+.message h2{
+    font-size: 1.5vw;
+}

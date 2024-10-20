@@ -4,6 +4,7 @@ import { backgrounds } from './iterates.js';
 import Clock from './components/clock.js'
 import ToDo from './components/toDoList/toDo.js';
 import Search from './components/searchBar/search.js'
+import Focus from './components/focus/focus.js'
 
 function App() {
 
@@ -22,13 +23,13 @@ function App() {
     <div className="App">
       <div className ="content" style={{backgroundImage:`url(${back})`}}>
         <div className="main">
-          <div className="top">
-            <Clock />
-            <div className="quote">{quote}</div>
-            <Search />
-          </div>
-          <div className="bottom">
-            
+          <div className="left">
+            <div className="time">
+              <Clock />
+              <div className="quote">{quote}</div>
+              <Search />
+            </div>
+            <Focus />
           </div>
         </div>
         <div className="to-do"> 

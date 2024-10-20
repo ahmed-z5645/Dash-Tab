@@ -2,7 +2,7 @@
     height:30%;
     width:80%;
     background-color: rgba(0, 0, 0, 0.500);
-    border-radius: 0.5vw;
+    border-radius: 1vw;
 }
 
 .cred-form{
@@ -17,7 +17,7 @@
 
 .login-go{
     background-color: #007AFF;
-    border-radius: 0.5vw;
+    border-radius: 1vw;
     border-color: transparent;
     border-style: solid;
     width:80%;
@@ -30,7 +30,7 @@
 
 .login-create{
     background-color: transparent;
-    color: #007AFF;
+    color: snow;
     font-size: 0.75vw;
     font-weight: 475;
     padding-bottom: 4%;
@@ -47,8 +47,9 @@
 
 .to-do-ui{
     overflow-y: scroll;
-    height: 98%;
+    height: 95%;
     margin-bottom: 2%;
+    border-radius: 1vw;
 }
 
 .to-do-ui::-webkit-scrollbar{
@@ -57,7 +58,7 @@
 
 .task{
     background-color: rgba(0, 0, 0, 0.500);
-    border-radius: 0.5vw;
+    border-radius: 1vw;
     display:flex;
     flex-direction: row;
     margin-bottom: 2%;
@@ -133,4 +134,10 @@
 
 .new-input:focus{
     outline-style: none;
+}
+
+.buttons{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
