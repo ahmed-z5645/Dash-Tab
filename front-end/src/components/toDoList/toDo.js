@@ -103,7 +103,7 @@ const ToDoList = () => {
                         <div className="new-to-do">
                             <form className="task" onSubmit={newTaskHandler}>
                                 <input className="new-input" 
-                                placeholder="New Task" 
+                                placeholder="New Note" 
                                 required
                                 value={newTaskTitle}
                                 onChange={(e) => setTaskTitle(e.target.value)}></input>
@@ -137,14 +137,14 @@ const ToDoList = () => {
             <div className="buttons">
                 <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "1vw",
                     display:"flex", justifyContent:"center", alignItems:"center", width: "75%", paddingBottom: 0,
-                    margin: "auto", borderRadius: "1vw", marginRight: "5%", fontSize:"1.2vw"}} onClick={logout}>
+                    margin: "auto", borderRadius: "1vw", marginRight: "5%", fontSize:"1.15vw"}} onClick={logout}>
                     <img />
                     <p><span className="task-title">Focus</span></p>
                     <img />
                 </div>
-                <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)", borderRadius: "1vw",
+                <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)",
                     display:"flex", justifyContent:"center", alignItems:"center", width: "20%", paddingBottom: 0,
-                    margin: "auto", borderRadius: "1vw"}} onClick={logout}><p><span className="task-title">Sign-Out</span></p></div>
+                    borderRadius: "1vw", fontSize:"1.15vw"}} onClick={logout}><p><span className="task-title">Sign-Out</span></p></div>
             </div>
             </div>
             :
