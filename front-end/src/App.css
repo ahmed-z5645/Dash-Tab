@@ -75,3 +75,19 @@
   margin-bottom: 0%;
   letter-spacing: 0;
 }
+
+@media screen and (min-aspect-ratio: 2){
+  .content{
+    width: 90vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+}
+
+@media screen and (min-aspect-ratio: 2.5){
+  .content{
+    width: 85vw;
+    padding-left: 7.5vw;
+    padding-right: 7.5vw;
+  }
+}
