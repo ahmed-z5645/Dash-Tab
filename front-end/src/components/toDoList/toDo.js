@@ -137,7 +137,8 @@ const ToDoList = () => {
             <div className="buttons">
                 <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)",
                     display:"flex", justifyContent:"center", alignItems:"center", width: "75%", paddingBottom: 0,
-                    margin: "auto", borderRadius: "1vw", marginRight: "5%", fontSize:"1.15vw", textDecoration:"underline"}}>
+                    margin: "auto", borderRadius: "1vw", marginRight: "5%", fontSize:"1.15vw"}} onClick={logout}>
+                    <img />
                     <p><span className="task-title">Focus</span></p>
                 </div>
                 <div className="login-create" style={{backgroundColor: "rgb(0, 0, 0, 0.500)",
