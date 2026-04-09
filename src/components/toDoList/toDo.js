@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { doc, setDoc, collection, orderBy, getDocs, deleteDoc } from 'firebase/firestore'
+import { doc, setDoc, collection, onSnapshot, deleteDoc } from 'firebase/firestore'
 import { auth, db } from "../../firebase.js";
 
 import './toDo.css'
@@ -15,36 +15,37 @@ const ToDoList = () => {
     const [curr_time, setCurrT] = useState(null);
     const [newTaskTitle, setTaskTitle] = useState("");
 
-    var time = new Date()
-    useEffect(()=>{
+    useEffect(() => {
         const time = new Date();
-        setCurrT(Math.floor(time.getTime()/1000))
+        setCurrT(Math.floor(time.getTime() / 1000))
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setIsLoggedIn(user);
-                getAllDocs(user)
             } else {
-                setIsLoggedIn(null)
+                setIsLoggedIn(null);
+                setUserDocs({});
             }
         });
         return () => unsubscribe();
-    })
+    }, [])
 
-    const getAllDocs = async(user) =>{
-        const taskCollecRef = collection(db, "users", user.uid, "tasks")
-        const collecSnap = await getDocs(taskCollecRef, orderBy("tOfCreate"))
-        if (Object.keys(userDocs).length == 0){            
-            //do I need smt here for the case where the user has no tasks?
-            var allObjects = {}
-            collecSnap.docs.map((doc)=> {
-                allObjects[doc.data().tOfCreate] = doc.data()
-            }, {});
-            setUserDocs(Object.fromEntries(Object.entries(allObjects).reverse()))
-        }
-        }
+    useEffect(() => {
+        const uid = isLoggedIn?.uid;
+        if (!uid) return;
+
+        const taskCollecRef = collection(db, "users", uid, "tasks");
+        const unsubscribe = onSnapshot(taskCollecRef, (snap) => {
+            const allObjects = {};
+            snap.docs.forEach((d) => {
+                allObjects[d.data().tOfCreate] = d.data();
+            });
+            setUserDocs(Object.fromEntries(Object.entries(allObjects).sort((a, b) => b[0] - a[0])));
+        });
+        return () => unsubscribe();
+    }, [isLoggedIn?.uid])
 
     const logout = () => {
         signOut(auth).then(() => {
@@ -54,27 +55,16 @@ const ToDoList = () => {
         });
     }
 
-    const newTaskHandler = async(e) => {
+    const newTaskHandler = async (e) => {
         e.preventDefault()
         try {
-            var time = new Date()
-            time = time.getTime()
+            const time = new Date().getTime()
             const data = {
-                                Title: newTaskTitle,
-                                tOfCreate: time,
-                                completed: false
-                        }
-            const newTask = doc(db, "users", isLoggedIn.uid, "tasks", time.toString())
-            await setDoc(newTask, data)
-            
-            const taskCollecRef = collection(db, "users", isLoggedIn.uid, "tasks")
-            const collecSnap = await getDocs(taskCollecRef, orderBy("tOfCreate"))
-            var allObjects = {}
-            collecSnap.docs.map((doc)=> {
-                allObjects[doc.data().tOfCreate] = doc.data()
-            }, {});
-            setUserDocs(Object.fromEntries(Object.entries(allObjects).reverse()))
-
+                Title: newTaskTitle,
+                tOfCreate: time,
+                completed: false
+            }
+            await setDoc(doc(db, "users", isLoggedIn.uid, "tasks", time.toString()), data)
             setTaskTitle("")
         } catch (error) {
             console.log(error)
@@ -82,13 +72,8 @@ const ToDoList = () => {
     }
 
     const deleteTask = async (title) => {
-        let temp = {...userDocs}
-        delete temp[String(title)];
-        const delTask = doc(db, "users", isLoggedIn.uid, "tasks", String(title))
         try {
-            await deleteDoc(delTask)
-            console.log("Doc deleted successfully")
-            setUserDocs(temp)    
+            await deleteDoc(doc(db, "users", isLoggedIn.uid, "tasks", String(title)))
         } catch (error) {
             console.log(error.message)
         }

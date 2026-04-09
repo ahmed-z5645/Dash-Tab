@@ -12,11 +12,20 @@ function App() {
   const [quote, setQuote] = useState("");
 
   useEffect(() => {
-    const num = Math.floor(Math.random() * 10)
-
-    setBack(backgrounds[num]["url"])
-    setQuote(`"${backgrounds[num]["quote"]}" - ${backgrounds[num]["author"]}`)
-    }, [])
+    const cached = sessionStorage.getItem('dash-background');
+    if (cached) {
+      const { url, quote } = JSON.parse(cached);
+      setBack(url);
+      setQuote(quote);
+    } else {
+      const num = Math.floor(Math.random() * 10);
+      const url = backgrounds[num]["url"];
+      const quote = `"${backgrounds[num]["quote"]}" - ${backgrounds[num]["author"]}`;
+      setBack(url);
+      setQuote(quote);
+      sessionStorage.setItem('dash-background', JSON.stringify({ url, quote }));
+    }
+  }, [])
 
   
   return (

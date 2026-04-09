@@ -1,23 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import './toDo.css'
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, onAuthStateChanged, signOut } from "firebase/auth/web-extension";
-import { collection, setDoc, doc } from "firebase/firestore";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, setPersistence, indexedDBLocalPersistence, signOut } from "firebase/auth/web-extension";
+import { setDoc, doc } from "firebase/firestore";
 
 import { auth, db } from "../../firebase.js"
 
 const LoginInterface = ({needCreate, setNeedCreate, isLoggedIn, setIsLoggedIn}) => {
 
-    useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setIsLoggedIn(user);
-            } else {
-                setIsLoggedIn(null)
-            }
-        });
-        return () => unsubscribe();
-    })
-    
     const signIn = (e) => {
         e.preventDefault();
         setPersistence(auth, indexedDBLocalPersistence)
